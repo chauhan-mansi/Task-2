@@ -3,13 +3,13 @@ const product = require("./products.model");
 exports.createProduct = async (req, res) => {
   try {
     const { title, fabric, colour, price, size } = req.body;
-    const existingProduct = await jacketSchema.findOne({ title });
+    const existingProduct = await product.findOne({ title });
     if (existingProduct) {
       return res
         .status(404)
         .json({ success: false, message: "Product Already Exists" });
     }
-    const productData = new jacketSchema({
+    const productData = new product({
       title,
       fabric,
       colour,
@@ -24,12 +24,10 @@ exports.createProduct = async (req, res) => {
 };
 
 exports.getProduct = async (req, res) => {
-  try {
-    const respond = await fetch(`http://localhost:6000/products`);
-    const respon = await respond.json();
-    console.log(respon);
-    res.json(respon);
-  } catch (error) {
-    res.send(`Internal Server Error`);
-  }
-};
+    try {
+      const products = await product.find(); 
+      res.status(200).json({ success: true, data: products });
+    } catch (error) {
+      res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+  };
