@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 
-
 const jacketSchema = new mongoose.Schema({
   title: { type: String, required: true },
   fabric: { type: String, required: true },
@@ -13,7 +12,6 @@ const jacketSchema = new mongoose.Schema({
   },
 });
 
+const product = mongoose.model("Product", jacketSchema);
 
-const product = mongoose.model('Product', jacketSchema);
-
-module.exports= product;
+module.exports = product;
