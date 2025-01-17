@@ -23,11 +23,20 @@ exports.createProduct = async (req, res) => {
   }
 };
 
-exports.getProduct = async (req, res) => {
-    try {
-      const products = await product.find(); 
-      res.status(200).json({ success: true, data: products });
-    } catch (error) {
-      res.status(500).json({ success: false, message: "Internal Server Error" });
-    }
-  };
+// exports.getProduct = async (req, res) => {
+//   try {
+//     const products = await product.find();
+//     res.status(200).json({ success: true, data: products });
+//   } catch (error) {
+//     res.status(500).json({ success: false, message: "Internal Server Error" });
+//   }
+// };
+
+exports.getProductById = async (req, res) => {
+  try {
+    const products = await product.findById("678a2dc866dcd7a4f316206a");
+    res.status(200).json({ success: true, data: products });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
