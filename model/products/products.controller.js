@@ -15,10 +15,9 @@ exports.createProduct = async (req, res) => {
       colour,
       price,
       size,
-      F,
     });
     await productData.save();
-    res.status(201).json({ success: true, message: "Product Added" });
+    res.status(200).json({ success: true, message: "Product Added" });
   } catch (error) {
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
