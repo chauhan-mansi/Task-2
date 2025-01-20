@@ -1,12 +1,19 @@
+const { SIZE } = require("../../constants/products");
 const product = require("./products.model");
 
 exports.createProduct = async (req, res) => {
   try {
     const { title, fabric, colour, price, size } = req.body;
+    const checkSize = SIZE[size];
+    if(!checkSize){
+      return res
+      .status(400)
+      .json({ success: false, message: "Please check size" });
+    }
     const existingProduct = await product.findOne({ title });
     if (existingProduct) {
       return res
-        .status(404)
+        .status(400)
         .json({ success: false, message: "Product Already Exists" });
     }
     const productData = new product({
@@ -19,6 +26,7 @@ exports.createProduct = async (req, res) => {
     await productData.save();
     res.status(200).json({ success: true, message: "Product Added" });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
@@ -42,7 +50,7 @@ exports.getProductById = async (req, res) => {
         .json({ success: false, message: "Product does not exists" });
     }
 
-    res.status(200).json({ success: true, data: products });
+    res.status(200).json({ success: true, data: existingProduct });
   } catch (error) {
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { SIZE } = require("../../constants/products");
 
 const jacketSchema = new mongoose.Schema({
   title: { type: String, required: true },
@@ -7,7 +8,7 @@ const jacketSchema = new mongoose.Schema({
   price: { type: Number, required: true },
   size: {
     type: String,
-    enum: ["small", "medium", "large"],
+    enum: [SIZE.SMALL, SIZE.MEDIUM, SIZE.LARGE],
     required: true,
   },
 });
