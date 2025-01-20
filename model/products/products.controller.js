@@ -1,16 +1,25 @@
 const { SIZE } = require("../../constants/products");
 const product = require("./products.model");
+const userSchema = require("../user/user.model");
+
 
 exports.createProduct = async (req, res) => {
   try {
-    const { title, fabric, colour, price, size } = req.body;
+    const { title, fabric, colour, price, size, user } = req.body;
     const checkSize = SIZE[size];
+    console.log(SIZE[size])
     if(!checkSize){
       return res
       .status(400)
       .json({ success: false, message: "Please check size" });
     }
-    const existingProduct = await product.findOne({ title });
+    const existingUser = await userSchema.findById(user)
+    if(!existingUser) {
+      return res
+      .status(400)
+      .json({ success: false, message: "User not found" });
+    }
+    const existingProduct = await product.findOne({ title })
     if (existingProduct) {
       return res
         .status(400)
@@ -22,6 +31,7 @@ exports.createProduct = async (req, res) => {
       colour,
       price,
       size,
+      user
     });
     await productData.save();
     res.status(200).json({ success: true, message: "Product Added" });
@@ -33,7 +43,7 @@ exports.createProduct = async (req, res) => {
 
 exports.getProduct = async (req, res) => {
   try {
-    const products = await product.find();
+    const products = await product.find().populate(['user']);
     res.status(200).json({ success: true, data: products });
   } catch (error) {
     res.status(500).json({ success: false, message: "Internal Server Error" });
@@ -43,7 +53,7 @@ exports.getProduct = async (req, res) => {
 exports.getProductById = async (req, res) => {
   const { id } = req.params;
   try {
-    const existingProduct = await product.findById(id);
+    const existingProduct = await product.findById(id).populate('user', select="name, email");
     if (!existingProduct) {
       return res
         .status(404)

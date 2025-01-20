@@ -5,7 +5,7 @@ const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const productRoutes = require("./model/products/products.routes");
 const userRoutes = require("./model/user/user.routes");
-
+const categoryRoutes = require("./model/category/category.reoutes");
 const app = express();
 app.use(cors());
 dotenv.config();
@@ -14,7 +14,8 @@ const port = process.env.PORT || 5000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/products", productRoutes);
-app.use("/users",userRoutes);
+app.use("/users", userRoutes);
+app.use("/category", categoryRoutes);
 
 app.listen(port, () => {
   connectDB();

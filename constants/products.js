@@ -1,5 +1,5 @@
 exports.SIZE = {
-  SMALL: "small",
-  MEDIUM: "medium",
-  LARGE: "large",
+  small: "small",
+  medium: "medium",
+  large: "large",
 };
