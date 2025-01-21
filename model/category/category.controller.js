@@ -1,18 +1,27 @@
 const category = require("./category.model");
+const subCategorySchema = require("../subcategory/subcategory.model");
 
 exports.createCategory = async (req, res) => {
   try {
-    const { name, description, status } = req.body;
+    const { name, description, status, subCategory } = req.body;
     const existingCategory = await category.findOne({ name });
     if (existingCategory) {
       return res
         .status(400)
         .json({ success: false, message: " Category Already Exists" });
     }
+    const existingSubCategory = await subCategorySchema.findById(subCategory);
+    if (!existingSubCategory) {
+      return res
+        .status(400)
+        .json({ success: false, message: "SubCategory not found" });
+    }
+
     const categoryData = new category({
       name,
       description,
       status,
+      subCategory,
     });
     await categoryData.save();
     res.status(200).json({ success: true, message: "Category Added" });
@@ -24,9 +33,10 @@ exports.createCategory = async (req, res) => {
 
 exports.getCategory = async (req, res) => {
   try {
-    const categories = await category.find();
+    const categories = await category.find().populate(["subCategory"]);
     res.status(200).json({ success: true, data: categories });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
