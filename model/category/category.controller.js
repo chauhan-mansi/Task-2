@@ -33,8 +33,29 @@ exports.createCategory = async (req, res) => {
 
 exports.getCategory = async (req, res) => {
   try {
-    const categories = await category.find().populate(["subCategory"]);
-    res.status(200).json({ success: true, data: categories });
+    const page = req.query.page ? parseInt(req.query.page, 10) : 1;
+    const limit = req.query.limit ? parseInt(req.query.page, 10) : 10;
+    const perPage = limit;
+    const currentPage = page;
+    const totalData = await category.countDocuments();
+    const totalPages = Math.ceil(totalData / perPage);
+    const categories = await category
+      .find()
+      .populate(["subCategory"])
+      .skip((currentPage - 1) * perPage)
+      .limit(perPage);
+    res.status(200).json({
+      success: true,
+      data: {
+        categories,
+        pagination: {
+          totalData,
+          totalPages,
+          currentPage,
+          perPage,
+        },
+      },
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ success: false, message: "Internal Server Error" });
