@@ -12,10 +12,10 @@ const authentication = require("../../middleware/authentication");
 const router = express.Router();
 
 router.post("/", createUser);
-router.get("/", getUser);
+router.get("/",authentication, getUser);
 router.get("/:id", getUserById);
 router.put("/", updateUser);
 router.delete("/:id", deleteUser);
-router.post("/login", authentication, userLogin);
+router.post("/login", userLogin);
 
 module.exports = router;
