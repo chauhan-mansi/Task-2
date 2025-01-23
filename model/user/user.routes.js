@@ -7,6 +7,7 @@ const {
   deleteUser,
   userLogin,
 } = require("./user.controller");
+const authentication = require("../../middleware/authentication");
 
 const router = express.Router();
 
