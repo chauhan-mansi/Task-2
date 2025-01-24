@@ -10,6 +10,7 @@ const electricSchema = new mongoose.Schema({
     required: true,
   },
   subCategory: { type: mongoose.Schema.Types.ObjectId, ref: "subCategory" },
+
 });
 
 const category = mongoose.model("Category", electricSchema);
